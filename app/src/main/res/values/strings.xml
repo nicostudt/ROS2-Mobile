@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ROS2-Mobile</string>
+    <string name="addWidget">Add Widget</string>
+    <string name="content_description_favorite">Button to add a new widget.</string>
+    <string name="runConfig">Run the current configuration.</string>
+    <string name="toggleRunning">Run</string>
 </resources>
