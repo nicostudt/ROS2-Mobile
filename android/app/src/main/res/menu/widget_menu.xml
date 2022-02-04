@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/group1">
+        <item
+            android:id="@+id/subtitle"
+            android:title="Controllers">
+            <menu>
+                <item
+                    android:icon="@drawable/ic_baseline_image_24"
+                    android:title="Button"/>
+
+                <item
+                    android:icon="@drawable/ic_baseline_image_24"
+                    android:title="Slider" />
+
+                <item
+                    android:icon="@drawable/ic_baseline_image_24"
+                    android:title="Joystick" />
+            </menu>
+        </item>
+    </group>
+
+    <group
+        android:id="@+id/group2">
+        <item
+            android:id="@+id/subtitle2"
+            android:title="Displays">
+            <menu>
+                <item
+                    android:icon="@drawable/ic_baseline_image_24"
+                    android:title="Battery indicator" />
+                <item
+                    android:icon="@drawable/ic_baseline_image_24"
+                    android:title="Image view" />
+                <item
+                    android:icon="@drawable/ic_baseline_image_24"
+                    android:title="Debug" />
+
+                <item
+                    android:icon="@drawable/ic_baseline_image_24"
+                    android:title="Logger" />
+
+                <item
+                    android:icon="@drawable/ic_baseline_image_24"
+                    android:title="Terminal" />
+
+                <item
+                    android:icon="@drawable/ic_baseline_image_24"
+                    android:title="Single Value"/>
+
+                <item
+                    android:icon="@drawable/ic_baseline_image_24"
+                    android:title="Compass" />
+
+                <item
+                    android:icon="@drawable/ic_baseline_addchart_24"
+                    android:title="Rqt Plot" />
+            </menu>
+        </item>
+    </group>
+
+    <group
+        android:id="@+id/group4">
+        <item
+            android:id="@+id/subtitle4"
+            android:title="Layers">
+            <menu>
+                <item
+                    android:icon="@drawable/ic_baseline_image_24"
+                    android:title="Gridmap" />
+                <item
+                    android:icon="@drawable/ic_baseline_image_24"
+                    android:title="Laserscan" />
+                <item
+                    android:icon="@drawable/ic_baseline_image_24"
+                    android:title="Path" />
+                <item
+                    android:icon="@drawable/ic_baseline_image_24"
+                    android:title="Pose" />
+                <item
+                    android:icon="@drawable/ic_baseline_image_24"
+                    android:title="Touch goal" />
+            </menu>
+        </item>
+    </group>
+
+    <group
+        android:id="@+id/group3">
+        <item
+            android:id="@+id/subtitle3"
+            android:title="Others">
+            <menu>
+                <item
+                    android:icon="@drawable/ic_baseline_image_24"
+                    android:title="GPS" />
+                <item
+                    android:icon="@drawable/ic_baseline_image_24"
+                    android:title="Viz 2D" />
+            </menu>
+        </item>
+    </group>
+
+</menu>

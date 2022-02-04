@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <declare-styleable name="WidgetViewGroup">
+        <attr name="crossColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="LayoutParams">
+        <attr name="tilesX" format="integer" />
+        <attr name="tilesY" format="integer" />
+        <attr name="tilesWidth" format="integer" />
+        <attr name="tilesHeight" format="integer" />
+    </declare-styleable>
+
+</resources>

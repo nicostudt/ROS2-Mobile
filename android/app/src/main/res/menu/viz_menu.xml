@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/openDrawer"
+        android:icon="@drawable/ic_baseline_addchart_24"
+        android:title="@string/addWidget"
+        android:contentDescription="@string/content_description_favorite"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/run"
+        android:icon="@drawable/ic_baseline_play_circle_outline_24"
+        android:title="@string/toggleRunning"
+        android:contentDescription="@string/runConfig"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/stop"
+        android:icon="@drawable/ic_outline_pause_circle_outline_24"
+        android:title="Stop"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
+</menu>
