@@ -30,8 +30,6 @@ public abstract class WidgetView extends ViewGroup implements IBaseView {
     private Paint cornerPaint;
     private Paint sidePaint;
     private boolean currentInteraction;
-    private Paint highlightPaint;
-    private boolean shouldHighlight = false;
 
 
     public WidgetView(Context context) {
@@ -47,11 +45,6 @@ public abstract class WidgetView extends ViewGroup implements IBaseView {
 
     private void baseInit() {
         setWillNotDraw(false);
-
-        highlightPaint = new Paint();
-        highlightPaint.setColor(getResources().getColor(R.color.colorPrimary));
-        highlightPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        highlightPaint.setAlpha(100);
 
         cornerPaint = new Paint();
         cornerPaint.setColor(getResources().getColor(R.color.colorPrimary));
@@ -117,31 +110,12 @@ public abstract class WidgetView extends ViewGroup implements IBaseView {
 
     public void setCurrentInteraction(boolean flag) {
         currentInteraction = flag;
+        invalidate();
     }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) { }
 
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        setOutlineProvider(new CustomOutline(w, h));
-    }
-
-    private class CustomOutline extends ViewOutlineProvider {
-
-        int width;
-        int height;
-
-        CustomOutline(int width, int height) {
-            this.width = width;
-            this.height = height;
-        }
-
-        @Override
-        public void getOutline(View view, Outline outline) {
-            outline.setRect(0, 0, width, height);
-        }
-    }
 
     @Override
     public void setWidgetEntity(BaseEntity widgetEntity) {
@@ -159,5 +133,6 @@ public abstract class WidgetView extends ViewGroup implements IBaseView {
     public boolean sameWidgetEntity(BaseEntity other) {
         return other.id == this.widgetEntity.id;
     }
+
 
 }

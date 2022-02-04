@@ -16,6 +16,7 @@
 
                 <item
                     android:icon="@drawable/ic_baseline_image_24"
+                    android:id="@+id/joystickItem"
                     android:title="Joystick" />
             </menu>
         </item>

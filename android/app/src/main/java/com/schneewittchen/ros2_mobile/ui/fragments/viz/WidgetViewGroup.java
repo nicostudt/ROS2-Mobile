@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.core.view.GestureDetectorCompat;
-import androidx.core.view.MotionEventCompat;
 
 import com.schneewittchen.ros2_mobile.BuildConfig;
 import com.schneewittchen.ros2_mobile.R;
@@ -43,8 +42,9 @@ public class WidgetViewGroup extends ViewGroup {
     int crossColor;
 
     private boolean editing = true;
-    private InteractionDetector interactionDetector;
-    private GestureDetectorCompat mDetector;
+    private GridInteractor gridInteractor;
+    //private GridInteractor gridInteractor;
+    //private GestureDetectorCompat mDetector;
 
     private List<BaseEntity> widgetList;
     DataListener dataListener;
@@ -71,21 +71,12 @@ public class WidgetViewGroup extends ViewGroup {
 
         this.widgetList = new ArrayList<>();
 
-        this.interactionDetector = new InteractionDetector() {
+        gridInteractor = new GridInteractor(this);
+        /*
+        this.gridInteractor = new GridInteractor(this);
 
-            @Override
-            public void onLongPress(MotionEvent motionEvent) {
-
-            }
-
-            @Override
-            public boolean onDoubleTap(MotionEvent motionEvent) {
-                return false;
-            }
-        };
-
-        this.mDetector = new GestureDetectorCompat(this.getContext(), interactionDetector);
-
+        this.mDetector = new GestureDetectorCompat(this.getContext(), gridInteractor);
+        */
     }
 
     @Override
@@ -94,7 +85,7 @@ public class WidgetViewGroup extends ViewGroup {
     }
 
     public boolean onTouchEvent(MotionEvent event) {
-        return this.mDetector.onTouchEvent(event);
+        return this.gridInteractor.onTouchEvent(event);
     }
 
     private void calculateTiles() {
@@ -145,7 +136,7 @@ public class WidgetViewGroup extends ViewGroup {
         }
     }
 
-    private void positionChild(int i) {
+    public void positionChild(int i) {
         final View child = getChildAt(i);
 
         // Check if view is visible
@@ -335,5 +326,13 @@ public class WidgetViewGroup extends ViewGroup {
 
             drawX += tileWidth;
         }
+    }
+
+    public void setEditMode(boolean flag) {
+        this.editing = flag;
+    }
+
+    public int posToGrid(float pos) {
+        return (int) (pos / tileWidth);
     }
 }

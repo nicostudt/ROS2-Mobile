@@ -22,6 +22,7 @@ import com.schneewittchen.ros2_mobile.widgets.joystick.JoystickEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 public class VizFragment extends Fragment {
@@ -30,6 +31,8 @@ public class VizFragment extends Fragment {
 
     private VizFragmentBinding binding;
     private VizViewModel mViewModel;
+
+    List<BaseEntity> widgetList = new ArrayList<>();
 
 
     public static VizFragment newInstance() {
@@ -49,28 +52,13 @@ public class VizFragment extends Fragment {
 
         binding = VizFragmentBinding.bind(view);
         binding.toolbar.setOnMenuItemClickListener(this::onMenuItemClicked);
-
-        List<BaseEntity> widgetList = new ArrayList<>();
-        BaseEntity entity = new JoystickEntity();
-        entity.type = "Joystick";
-        entity.name = "Joystick";
-
-        BaseEntity entity2 = new JoystickEntity();
-        entity2.type = "Joystick";
-        entity2.name = "Joystick2";
-        Position pos = ((IPositionEntity)entity2).getPosition();
-        pos.x = 4;
-
-        ((IPositionEntity)entity2).setPosition(pos);
-
-        widgetList.add(entity);
-        widgetList.add(entity2);
-
-        binding.widgetGroupview.setWidgets(widgetList);
+        binding.widgetMenu.setNavigationItemSelectedListener(this::onMenuItemClicked);
     }
 
 
     public boolean onMenuItemClicked(@NonNull MenuItem item) {
+        Log.i(TAG, "Clicked " + item.getItemId());
+
         int id = item.getItemId();
 
         if (id == R.id.run)  {
@@ -81,8 +69,31 @@ public class VizFragment extends Fragment {
             setRunning(false);
             return true;
 
-        }else if (id == R.id.openDrawer) {
+        } else if (id == R.id.openDrawer) {
             toggleDrawer();
+            return true;
+
+        } else if (id == R.id.joystickItem) {
+            BaseEntity entity = new JoystickEntity();
+            entity.id = new Random().nextLong();
+            entity.type = "Joystick";
+            entity.name = "Joystick" + new Random().nextInt(545621);
+
+            widgetList.add(entity);
+            binding.vizDrawer.closeDrawer(Gravity.RIGHT);
+            binding.widgetGroupview.setWidgets(widgetList);
+
+            /*
+            BaseEntity entity2 = new JoystickEntity();
+            entity2.type = "Joystick";
+            entity2.name = "Joystick2";
+            Position pos = ((IPositionEntity) entity2).getPosition();
+            pos.x = 4;
+
+            ((IPositionEntity) entity2).setPosition(pos);
+            widgetList.add(entity2);
+            */
+
             return true;
 
         } else {
@@ -91,11 +102,25 @@ public class VizFragment extends Fragment {
     }
 
     private void setRunning(boolean running) {
+        // Toggle Menu items for run/stop
         MenuItem runItem = binding.toolbar.getMenu().findItem(R.id.run);
         MenuItem stopItem = binding.toolbar.getMenu().findItem(R.id.stop);
 
         runItem.setVisible(!running);
         stopItem.setVisible(running);
+
+        // Block/ Continue widget adding
+        MenuItem openItem = binding.toolbar.getMenu().findItem(R.id.openDrawer);
+        openItem.setVisible(!running);
+
+        int lockMode = running ? DrawerLayout.LOCK_MODE_LOCKED_CLOSED:
+                                DrawerLayout.LOCK_MODE_UNLOCKED;
+
+        binding.vizDrawer.setDrawerLockMode(lockMode);
+
+        // Change mode of widget groupview
+        binding.widgetGroupview.setEditMode(!running);
+
     }
 
     private void toggleDrawer() {
