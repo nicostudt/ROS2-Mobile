@@ -81,7 +81,7 @@ public class VizFragment extends Fragment {
 
             widgetList.add(entity);
             binding.vizDrawer.closeDrawer(Gravity.RIGHT);
-            binding.widgetGroupview.setWidgets(widgetList);
+            binding.widgetGroupview.adapter.setWidgets(widgetList);
 
             /*
             BaseEntity entity2 = new JoystickEntity();

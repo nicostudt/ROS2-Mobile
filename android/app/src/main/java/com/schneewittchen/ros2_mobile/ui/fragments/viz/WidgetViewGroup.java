@@ -39,15 +39,12 @@ public class WidgetViewGroup extends ViewGroup {
     private int tilesX;
     private int tilesY;
     private float tileWidth;
-    int crossColor;
+    private int crossColor;
 
     private boolean editing = true;
     private GridInteractor gridInteractor;
-    //private GridInteractor gridInteractor;
-    //private GestureDetectorCompat mDetector;
+    public WidgetGridAdapter adapter;
 
-    private List<BaseEntity> widgetList;
-    DataListener dataListener;
 
 
     public WidgetViewGroup(Context context, AttributeSet attrs) {
@@ -69,14 +66,8 @@ public class WidgetViewGroup extends ViewGroup {
 
         this.setWillNotDraw(false);
 
-        this.widgetList = new ArrayList<>();
-
+        adapter = new WidgetGridAdapter(this);
         gridInteractor = new GridInteractor(this);
-        /*
-        this.gridInteractor = new GridInteractor(this);
-
-        this.mDetector = new GestureDetectorCompat(this.getContext(), gridInteractor);
-        */
     }
 
     @Override
@@ -153,156 +144,6 @@ public class WidgetViewGroup extends ViewGroup {
 
         // Place the child.
         child.layout(x, y, x + w, y + h);
-    }
-
-    public void setWidgets(List<BaseEntity> newWidgets) {
-        boolean changes = false;
-
-        // Create widget check with ids
-        HashMap<Long, Boolean> widgetCheckMap = new HashMap<>();
-        HashMap<Long, BaseEntity> widgetEntryMap = new HashMap<>();
-
-        for (BaseEntity oldWidget: this.widgetList) {
-            widgetCheckMap.put(oldWidget.id, false);
-            widgetEntryMap.put(oldWidget.id, oldWidget);
-        }
-
-        for (BaseEntity newWidget: newWidgets) {
-            if (widgetCheckMap.containsKey(newWidget.id)) {
-                widgetCheckMap.put(newWidget.id, true);
-
-                // Check if widget has changed
-                BaseEntity oldWidget = widgetEntryMap.get(newWidget.id);
-
-                if (!oldWidget.equals(newWidget)){
-                    changeViewFor(newWidget);
-                    changes = true;
-                }
-
-            } else{
-                addViewFor(newWidget);
-                changes = true;
-            }
-        }
-
-        // Delete unused widgets
-        for (Long id: widgetCheckMap.keySet()) {
-            if (!widgetCheckMap.get(id)) {
-                removeViewFor(widgetEntryMap.get(id));
-                changes = true;
-            }
-        }
-
-        this.widgetList.clear();
-        this.widgetList.addAll(newWidgets);
-
-        if (changes) {
-            requestLayout();
-        }
-    }
-
-
-
-    private void addViewFor(BaseEntity entity) {
-        Log.i(TAG, "Add view for " + entity);
-
-        IBaseView baseView = createViewFrom(entity);
-
-        if (baseView == null) return;
-
-        baseView.setWidgetEntity(entity);
-
-        // Check if view is a group view and register the sub layers
-
-        /*
-        if (baseView instanceof WidgetGroupView) {
-            WidgetGroupView groupView = (WidgetGroupView) baseView;
-
-            for (BaseEntity subEntity: entity.childEntities)  {
-                IBaseView subView = createViewFrom(subEntity);
-                subView.setWidgetEntity(subEntity);
-
-                if (!(subView instanceof LayerView))
-                    return;
-
-                groupView.addLayer((LayerView)subView);
-            }
-
-        }*/
-
-        // Set data listener if view is a publisher
-        if (baseView instanceof IPublisherView) {
-            ((IPublisherView)baseView).setDataListener(this::informDataChange);
-        }
-
-        // Add as subview if the view is a widget view
-        if (baseView instanceof WidgetView) {
-            this.addView((WidgetView)baseView);
-        }
-
-    }
-
-    private IBaseView createViewFrom(BaseEntity entity) {
-        Log.i(TAG, "Create View from " + entity);
-
-        // Create actual widget view object
-        String classPath = BuildConfig.APPLICATION_ID
-                + String.format(Constants.VIEW_FORMAT, entity.type.toLowerCase(), entity.type);
-
-
-        Object object;
-
-        try {
-            Class<?> clazz = Class.forName(classPath);
-            Constructor<?> constructor = clazz.getConstructor(Context.class);
-            object = constructor.newInstance(this.getContext());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        Log.i(TAG, "object is a : " + object.getClass().getCanonicalName());
-
-
-        if (!(object instanceof IBaseView)) {
-            Log.i(TAG, "View can not be created from: " + classPath);
-            return null;
-        }
-
-        return (IBaseView) object;
-    }
-
-    private void changeViewFor(BaseEntity entity) {
-        Log.i(TAG, "Change view for " + entity.name);
-
-        for(int i = 0; i < this.getChildCount(); i++) {
-            IBaseView view = (IBaseView) this.getChildAt(i);
-
-            if (view.sameWidgetEntity(entity)) {
-                view.setWidgetEntity(entity);
-                return;
-            }
-        }
-    }
-
-    private void removeViewFor(BaseEntity entity) {
-        Log.i(TAG, "Remove view for " + entity.name);
-
-        for(int i = 0; i < this.getChildCount(); i++) {
-            IBaseView view = (IBaseView) this.getChildAt(i);
-
-            if (view.sameWidgetEntity(entity)) {
-                this.removeView((WidgetView)view);
-                return;
-            }
-        }
-    }
-
-    public void informDataChange(BaseData data) {
-        if (dataListener != null) {
-            dataListener.onNewWidgetData(data);
-        }
     }
 
     @Override
