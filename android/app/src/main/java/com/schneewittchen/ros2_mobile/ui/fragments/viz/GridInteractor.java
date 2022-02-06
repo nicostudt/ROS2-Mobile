@@ -66,10 +66,7 @@ public class GridInteractor {
         view.setCurrentInteraction(true);
         vibrator.vibrate(20);
 
-        int gridX = widgetViewGroup.posToGrid(startDragX);
-        int gridY = widgetViewGroup.posToGrid(startDragY);
-
-        posListener = new PositionChangeListener(gridX, gridY) {
+        posListener = new PositionChangeListener(0, 0) {
             @Override
             public void onChange(int dx, int dy) {
                 Position pos = view.getPosition();
@@ -84,11 +81,11 @@ public class GridInteractor {
     private void drag(MotionEvent ev) {
         //Log.i(TAG, "Drag");
         // Determine grid movement
-        //float distX = ev.getX() - startDragX;
-        //float distY = ev.getY() - startDragY;
+        float distX = ev.getX() - startDragX;
+        float distY = ev.getY() - startDragY;
 
-        int gridX = widgetViewGroup.posToGrid(ev.getX());
-        int gridY = widgetViewGroup.posToGrid(ev.getY());
+        int gridX = widgetViewGroup.posToGrid(distX);
+        int gridY = widgetViewGroup.posToGrid(distY);
 
         posListener.update(gridX, gridY);
     }

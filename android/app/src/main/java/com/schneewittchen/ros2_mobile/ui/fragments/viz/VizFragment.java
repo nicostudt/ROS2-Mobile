@@ -14,8 +14,6 @@ import androidx.fragment.app.Fragment;
 
 import com.schneewittchen.ros2_mobile.R;
 import com.schneewittchen.ros2_mobile.model.entities.widgets.BaseEntity;
-import com.schneewittchen.ros2_mobile.model.entities.widgets.IPositionEntity;
-import com.schneewittchen.ros2_mobile.ui.general.Position;
 import com.schneewittchen.ros2_mobile.viewmodel.VizViewModel;
 import com.schneewittchen.ros2_mobile.databinding.VizFragmentBinding;
 import com.schneewittchen.ros2_mobile.widgets.joystick.JoystickEntity;
@@ -53,6 +51,15 @@ public class VizFragment extends Fragment {
         binding = VizFragmentBinding.bind(view);
         binding.toolbar.setOnMenuItemClickListener(this::onMenuItemClicked);
         binding.widgetMenu.setNavigationItemSelectedListener(this::onMenuItemClicked);
+
+        mViewModel.getWidgets().observe(getViewLifecycleOwner(), widgetEntities -> {
+            binding.widgetGroupview.adapter.setWidgets(widgetEntities);
+        });
+
+
+        mViewModel.getEditMode().observe(getViewLifecycleOwner(), editMode -> {
+            changeViewMode(editMode);
+        });
     }
 
 
@@ -62,11 +69,11 @@ public class VizFragment extends Fragment {
         int id = item.getItemId();
 
         if (id == R.id.run)  {
-            setRunning(true);
+            mViewModel.startRosConnection();
             return true;
 
         } else if (id == R.id.stop) {
-            setRunning(false);
+            mViewModel.stopRosConnection();
             return true;
 
         } else if (id == R.id.openDrawer) {
@@ -101,26 +108,28 @@ public class VizFragment extends Fragment {
         }
     }
 
-    private void setRunning(boolean running) {
-        // Toggle Menu items for run/stop
+    /**
+     * Change view mode to running process or edit mode
+     * @param editModeEnabled Flag if edit mode is enabled
+     */
+    private void changeViewMode(boolean editModeEnabled) {
+        // Lock/unlock menu items
+        MenuItem openItem = binding.toolbar.getMenu().findItem(R.id.openDrawer);
         MenuItem runItem = binding.toolbar.getMenu().findItem(R.id.run);
         MenuItem stopItem = binding.toolbar.getMenu().findItem(R.id.stop);
 
-        runItem.setVisible(!running);
-        stopItem.setVisible(running);
+        openItem.setVisible(editModeEnabled);
+        runItem.setVisible(editModeEnabled);
+        stopItem.setVisible(!editModeEnabled);
 
-        // Block/ Continue widget adding
-        MenuItem openItem = binding.toolbar.getMenu().findItem(R.id.openDrawer);
-        openItem.setVisible(!running);
-
-        int lockMode = running ? DrawerLayout.LOCK_MODE_LOCKED_CLOSED:
-                                DrawerLayout.LOCK_MODE_UNLOCKED;
+        // Lock/unlock menu drawer
+        int lockMode = editModeEnabled ? DrawerLayout.LOCK_MODE_UNLOCKED:
+                DrawerLayout.LOCK_MODE_LOCKED_CLOSED;
 
         binding.vizDrawer.setDrawerLockMode(lockMode);
 
-        // Change mode of widget groupview
-        binding.widgetGroupview.setEditMode(!running);
-
+        // Change mode of widget group view
+        binding.widgetGroupview.setEditMode(editModeEnabled);
     }
 
     private void toggleDrawer() {
