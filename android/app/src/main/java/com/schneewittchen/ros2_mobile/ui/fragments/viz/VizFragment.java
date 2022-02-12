@@ -54,7 +54,7 @@ public class VizFragment extends Fragment {
 
         mViewModel.getWidgets().observe(getViewLifecycleOwner(), widgetEntities -> {
             binding.widgetGroupview.adapter.setWidgets(widgetEntities);
-        });
+        });d
 
 
         mViewModel.getEditMode().observe(getViewLifecycleOwner(), editMode -> {
