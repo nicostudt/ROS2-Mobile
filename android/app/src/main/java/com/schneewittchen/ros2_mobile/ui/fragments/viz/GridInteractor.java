@@ -69,9 +69,7 @@ public class GridInteractor {
         posListener = new PositionChangeListener(0, 0) {
             @Override
             public void onChange(int dx, int dy) {
-                Position pos = view.getPosition();
-                pos.x += dx;
-                pos.y -= dy;
+                view.move(dx, dy);
                 widgetViewGroup.positionChild(draggedViewId);
             }
         };
@@ -93,7 +91,9 @@ public class GridInteractor {
     private void endDrag() {
         if (isDragging) {
             Log.i(TAG, "endDrag");
-            ((WidgetView)widgetViewGroup.getChildAt(draggedViewId)).setCurrentInteraction(false);
+            WidgetView view = (WidgetView)widgetViewGroup.getChildAt(draggedViewId);
+            view.lockPosition();
+            view.setCurrentInteraction(false);
         }
 
         isDragging = false;

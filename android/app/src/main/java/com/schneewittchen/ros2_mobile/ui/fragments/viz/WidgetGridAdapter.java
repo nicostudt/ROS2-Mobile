@@ -19,7 +19,7 @@ import java.util.List;
 
 public class WidgetGridAdapter {
 
-    public static final String TAG = "LOG|" + WidgetGridAdapter.class.getSimpleName();
+    public static final String TAG = "Log|" + WidgetGridAdapter.class.getSimpleName();
 
     private WidgetViewGroup viewGroup;
     private DataListener dataListener;

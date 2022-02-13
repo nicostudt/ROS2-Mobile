@@ -10,7 +10,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.schneewittchen.ros2_mobile.model.domain.RosDomain;
 import com.schneewittchen.ros2_mobile.model.entities.widgets.BaseData;
 import com.schneewittchen.ros2_mobile.model.entities.widgets.BaseEntity;
-import com.schneewittchen.ros2_mobile.model.repositories.rosRepo.message.RosData;
 
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class VizViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<BaseEntity>> getWidgets() {
-        return rosDomain.getCurrentWidgets();
+        return rosDomain.getCurrentEntities();
     }
 
     public void publishData(BaseData data) {

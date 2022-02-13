@@ -19,4 +19,8 @@ public class Position {
         this.width = width;
         this.height = height;
     }
+
+    public Position copy() {
+        return new Position(this.x, this.y, this.width, this.height);
+    }
 }

@@ -54,12 +54,9 @@ public class VizFragment extends Fragment {
 
         mViewModel.getWidgets().observe(getViewLifecycleOwner(), widgetEntities -> {
             binding.widgetGroupview.adapter.setWidgets(widgetEntities);
-        });d
-
-
-        mViewModel.getEditMode().observe(getViewLifecycleOwner(), editMode -> {
-            changeViewMode(editMode);
         });
+
+        mViewModel.getEditMode().observe(getViewLifecycleOwner(), this::changeViewMode);
     }
 
 
@@ -70,42 +67,22 @@ public class VizFragment extends Fragment {
 
         if (id == R.id.run)  {
             mViewModel.startRosConnection();
-            return true;
 
         } else if (id == R.id.stop) {
             mViewModel.stopRosConnection();
-            return true;
 
         } else if (id == R.id.openDrawer) {
             toggleDrawer();
-            return true;
 
         } else if (id == R.id.joystickItem) {
-            BaseEntity entity = new JoystickEntity();
-            entity.id = new Random().nextLong();
-            entity.type = "Joystick";
-            entity.name = "Joystick" + new Random().nextInt(545621);
-
-            widgetList.add(entity);
+            mViewModel.createWidget("Joystick");
             binding.vizDrawer.closeDrawer(Gravity.RIGHT);
-            binding.widgetGroupview.adapter.setWidgets(widgetList);
-
-            /*
-            BaseEntity entity2 = new JoystickEntity();
-            entity2.type = "Joystick";
-            entity2.name = "Joystick2";
-            Position pos = ((IPositionEntity) entity2).getPosition();
-            pos.x = 4;
-
-            ((IPositionEntity) entity2).setPosition(pos);
-            widgetList.add(entity2);
-            */
-
-            return true;
 
         } else {
             return super.onOptionsItemSelected(item);
         }
+
+        return true;
     }
 
     /**

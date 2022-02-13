@@ -23,14 +23,11 @@ public abstract class WidgetView extends ViewGroup implements IBaseView {
 
     public static String TAG = WidgetView.class.getSimpleName();
 
-    protected Position position;
     protected BaseEntity widgetEntity;
-    private float tileWidth;
-
     private Paint cornerPaint;
     private Paint sidePaint;
     private boolean currentInteraction;
-
+    private Position position;
 
     public WidgetView(Context context) {
         super(context, null);
@@ -89,19 +86,16 @@ public abstract class WidgetView extends ViewGroup implements IBaseView {
 
         canvas.drawLine(w-30, h, w, h-30, sidePaint);
         canvas.drawLine(w-60, h, w, h-60, sidePaint);
-        //canvas.drawLine(w, h, w, h-lineD, cornerPaint);
 
-        // LEFT
-        //canvas.drawRoundRect(w2-sideD, -sideD, w2+sideD, sideD, 10, 10, sidePaint);
-        // TOP
-        // RIGHT
-        // BOTTOM
-
-        //canvas.drawRect(0, 0, getWidth(), getHeight(), paint);
     }
 
-    public void updatePosition() {
-        this.position = ((IPositionEntity)widgetEntity).getPosition();
+    public void move(int dx, int dy) {
+        this.position.x += dx;
+        this.position.y -= dy;
+    }
+
+    public void lockPosition() {
+        ((IPositionEntity)widgetEntity).setPosition(position);
     }
 
     public Position getPosition() {
@@ -120,7 +114,7 @@ public abstract class WidgetView extends ViewGroup implements IBaseView {
     @Override
     public void setWidgetEntity(BaseEntity widgetEntity) {
         this.widgetEntity = widgetEntity;
-        this.updatePosition();
+        this.position = ((IPositionEntity)widgetEntity).getPosition().copy();
     }
 
     @Override
@@ -133,6 +127,5 @@ public abstract class WidgetView extends ViewGroup implements IBaseView {
     public boolean sameWidgetEntity(BaseEntity other) {
         return other.id == this.widgetEntity.id;
     }
-
 
 }
